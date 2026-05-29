@@ -132,15 +132,28 @@ export default function Contact() {
                 </div>
               </div>
 
-              {/* Map Placeholder */}
-              <div className="aspect-video bg-muted rounded-2xl overflow-hidden relative border border-border shadow-sm">
-                {/* Embedded map or placeholder */}
-                <div className="absolute inset-0 flex flex-col items-center justify-center text-muted-foreground bg-accent/5">
-                  <MapPin size={48} className="mb-2 opacity-20" />
-                  <p className="font-medium">Map View</p>
-                  <p className="text-sm">63 Middlepark Road, Cushendall</p>
-                </div>
+              {/* Google Maps Embed */}
+              <div className="rounded-2xl overflow-hidden border border-border shadow-sm">
+                <iframe
+                  title="Glens Residential Home on Google Maps"
+                  src="https://maps.google.com/maps?q=55.0733172,-6.0599845&z=17&output=embed"
+                  width="100%"
+                  height="320"
+                  style={{ border: 0, display: "block" }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
               </div>
+              <a
+                href="https://www.google.com/maps/place/63+Middlepark+Rd,+Cushendall,+Ballymena+BT44+0SQ,+UK/@55.0733172,-6.0599845,17z"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80 transition-colors"
+              >
+                <ExternalLink size={14} />
+                View on Google Maps
+              </a>
             </motion.div>
 
             {/* Contact Form */}
