@@ -1,7 +1,12 @@
-import { Phone, MapPin, Mail, ExternalLink } from "lucide-react";
+import { Phone, MapPin, ExternalLink } from "lucide-react";
 import { Link } from "wouter";
+import { useSettings } from "@/hooks/useSettings";
 
 export function Footer() {
+  const { settings } = useSettings();
+  const phoneDigits = settings.phone.replace(/\s+/g, "");
+  const addressLines = settings.address.split("\n");
+
   return (
     <footer className="bg-foreground text-primary-foreground py-12 lg:py-16 mt-auto">
       <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -16,13 +21,24 @@ export function Footer() {
 
         <div className="flex flex-col gap-4">
           <h3 className="font-serif font-bold text-lg text-white">Contact Us</h3>
-          <a href="tel:02821771396" className="flex items-center gap-3 text-primary-foreground/80 hover:text-white transition-colors">
-            <Phone size={18} className="text-primary" />
-            <span>028 2177 1396</span>
+          <a
+            href={`tel:${phoneDigits}`}
+            className="flex items-center gap-3 text-primary-foreground/80 hover:text-white transition-colors"
+            data-testid="footer-phone"
+          >
+            <Phone size={18} className="text-primary shrink-0" />
+            <span>{settings.phone}</span>
           </a>
-          <div className="flex items-start gap-3 text-primary-foreground/80">
+          <div className="flex items-start gap-3 text-primary-foreground/80" data-testid="footer-address">
             <MapPin size={18} className="text-primary mt-1 shrink-0" />
-            <span>63 Middlepark Road<br/>Cushendall, Ballymena<br/>BT44 0SQ</span>
+            <span>
+              {addressLines.map((line, i) => (
+                <span key={i}>
+                  {line}
+                  {i < addressLines.length - 1 && <br />}
+                </span>
+              ))}
+            </span>
           </div>
         </div>
 
@@ -40,9 +56,9 @@ export function Footer() {
           <p className="text-primary-foreground/80 text-sm mb-2">
             We are fully regulated by the Regulation and Quality Improvement Authority (RQIA) and proud of our "Good" rating.
           </p>
-          <a 
-            href="https://www.rqia.org.uk" 
-            target="_blank" 
+          <a
+            href="https://www.rqia.org.uk"
+            target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 text-primary hover:text-primary/80 transition-colors font-medium"
           >
@@ -50,7 +66,7 @@ export function Footer() {
           </a>
         </div>
       </div>
-      
+
       <div className="container mx-auto px-4 mt-12 pt-8 border-t border-primary-foreground/20 text-center text-primary-foreground/60 text-sm">
         <p>&copy; {new Date().getFullYear()} Glens Properties LLP. All rights reserved.</p>
       </div>

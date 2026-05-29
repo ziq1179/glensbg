@@ -1,6 +1,6 @@
 import app from "./app";
 import { logger } from "./lib/logger";
-import { seedStaffUsers } from "./lib/seed";
+import { seedStaffUsers, seedSiteSettings } from "./lib/seed";
 
 const rawPort = process.env["PORT"];
 
@@ -26,7 +26,8 @@ app.listen(port, async (err) => {
 
   try {
     await seedStaffUsers();
+    await seedSiteSettings();
   } catch (e) {
-    logger.error({ err: e }, "Failed to seed staff users");
+    logger.error({ err: e }, "Failed to run seed");
   }
 });

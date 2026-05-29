@@ -8,9 +8,10 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { Phone, MapPin, Mail, ExternalLink } from "lucide-react";
+import { Phone, MapPin, ExternalLink } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
+import { useSettings } from "@/hooks/useSettings";
 
 const formSchema = z.object({
   name: z.string().min(2, "Name is required"),
@@ -21,6 +22,9 @@ const formSchema = z.object({
 
 export default function Contact() {
   const { toast } = useToast();
+  const { settings } = useSettings();
+  const phoneDigits = settings.phone.replace(/\s+/g, "");
+  const addressLines = settings.address.split("\n");
   
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -79,9 +83,12 @@ export default function Contact() {
                       <h3 className="font-bold mb-1">Address</h3>
                       <p className="text-muted-foreground leading-relaxed">
                         Glens Residential Home<br/>
-                        63 Middlepark Road<br/>
-                        Cushendall, Ballymena<br/>
-                        BT44 0SQ
+                        {addressLines.map((line, i) => (
+                          <span key={i}>
+                            {line}
+                            {i < addressLines.length - 1 && <br />}
+                          </span>
+                        ))}
                       </p>
                     </div>
                   </div>
@@ -92,8 +99,8 @@ export default function Contact() {
                     </div>
                     <div>
                       <h3 className="font-bold mb-1">Phone</h3>
-                      <a href="tel:02821771396" className="text-muted-foreground hover:text-primary transition-colors text-lg">
-                        028 2177 1396
+                      <a href={`tel:${phoneDigits}`} className="text-muted-foreground hover:text-primary transition-colors text-lg">
+                        {settings.phone}
                       </a>
                     </div>
                   </div>

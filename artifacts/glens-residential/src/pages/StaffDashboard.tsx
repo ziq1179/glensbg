@@ -2,10 +2,13 @@ import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
 import { useStaffAuth } from "@/hooks/useStaffAuth";
 import { usePhotos, type SitePhoto } from "@/hooks/usePhotos";
+import { useSettings } from "@/hooks/useSettings";
 import { SEO } from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -20,6 +23,9 @@ import {
   ShieldCheck,
   CheckCircle,
   Loader2,
+  Phone,
+  MapPin,
+  Save,
 } from "lucide-react";
 
 const SECTIONS = [
@@ -245,6 +251,82 @@ function SectionPanel({ section }: { section: (typeof SECTIONS)[number] }) {
   );
 }
 
+function ContactDetailsEditor() {
+  const { settings, save } = useSettings();
+  const { toast } = useToast();
+  const [phone, setPhone] = useState(settings.phone);
+  const [address, setAddress] = useState(settings.address);
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    setPhone(settings.phone);
+    setAddress(settings.address);
+  }, [settings.phone, settings.address]);
+
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      await save({ phone: phone.trim(), address: address.trim() });
+      toast({ title: "Contact details saved", description: "The website phone number and address have been updated." });
+    } catch (e) {
+      toast({ title: "Failed to save", description: e instanceof Error ? e.message : "Unknown error", variant: "destructive" });
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const hasChanges = phone.trim() !== settings.phone || address.trim() !== settings.address;
+
+  return (
+    <Card className="border border-border shadow-sm">
+      <CardContent className="p-6">
+        <div className="space-y-5">
+          <div className="space-y-1.5">
+            <label className="text-sm font-medium text-foreground flex items-center gap-2">
+              <Phone size={14} className="text-primary" />
+              Phone Number
+            </label>
+            <Input
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              placeholder="028 2177 1396"
+              className="bg-background font-medium"
+              data-testid="input-phone"
+            />
+            <p className="text-xs text-muted-foreground">Shown in the navbar, footer, and contact page.</p>
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="text-sm font-medium text-foreground flex items-center gap-2">
+              <MapPin size={14} className="text-primary" />
+              Address
+            </label>
+            <Textarea
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              placeholder={"63 Middlepark Road\nCushendall, Ballymena\nBT44 0SQ"}
+              className="bg-background resize-none"
+              rows={3}
+              data-testid="input-address"
+            />
+            <p className="text-xs text-muted-foreground">Each line break becomes a new line on the website. Shown in the footer and contact page.</p>
+          </div>
+
+          <Button
+            onClick={handleSave}
+            disabled={saving || !hasChanges}
+            className="rounded-full"
+            data-testid="button-save-contact"
+          >
+            {saving ? <Loader2 size={14} className="mr-1.5 animate-spin" /> : <Save size={14} className="mr-1.5" />}
+            {saving ? "Saving…" : "Save Changes"}
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
 export default function StaffDashboard() {
   const [, setLocation] = useLocation();
   const { user, loading, logout } = useStaffAuth();
@@ -320,6 +402,21 @@ export default function StaffDashboard() {
             {SECTIONS.map((section) => (
               <SectionPanel key={section.id} section={section} />
             ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-10 border-t border-border bg-muted/20">
+        <div className="container mx-auto px-4 max-w-5xl">
+          <div className="flex items-center gap-2 mb-2">
+            <Phone size={20} className="text-primary" />
+            <h2 className="text-xl font-serif font-bold text-foreground">Contact Details</h2>
+          </div>
+          <p className="text-muted-foreground mb-8">
+            Update the phone number and address shown across the website — navbar, footer, and contact page.
+          </p>
+          <div className="max-w-lg">
+            <ContactDetailsEditor />
           </div>
         </div>
       </section>

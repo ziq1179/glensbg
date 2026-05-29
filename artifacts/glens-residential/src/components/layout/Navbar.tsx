@@ -3,10 +3,12 @@ import { Phone, Menu, X, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useSettings } from "@/hooks/useSettings";
 
 export function Navbar() {
   const [location] = useLocation();
   const [isOpen, setIsOpen] = useState(false);
+  const { settings } = useSettings();
 
   const links = [
     { href: "/", label: "Home" },
@@ -16,6 +18,8 @@ export function Navbar() {
     { href: "/careers", label: "Careers" },
     { href: "/contact", label: "Contact & FAQ" },
   ];
+
+  const phoneDigits = settings.phone.replace(/\s+/g, "");
 
   return (
     <nav className="sticky top-0 z-50 w-full bg-background/90 backdrop-blur-md border-b border-border shadow-sm transition-all duration-300">
@@ -44,9 +48,13 @@ export function Navbar() {
 
         {/* Desktop Actions */}
         <div className="hidden lg:flex items-center gap-4">
-          <a href="tel:02821771396" className="text-primary hover:text-primary/80 font-medium flex items-center gap-2" data-testid="nav-phone">
+          <a
+            href={`tel:${phoneDigits}`}
+            className="text-primary hover:text-primary/80 font-medium flex items-center gap-2"
+            data-testid="nav-phone"
+          >
             <Phone size={18} />
-            <span>028 2177 1396</span>
+            <span>{settings.phone}</span>
           </a>
           <Button asChild size="lg" className="rounded-full shadow-md" data-testid="nav-book-visit">
             <Link href="/contact">Book a Visit</Link>
@@ -62,8 +70,8 @@ export function Navbar() {
         </div>
 
         {/* Mobile Toggle */}
-        <button 
-          className="lg:hidden p-2 text-foreground" 
+        <button
+          className="lg:hidden p-2 text-foreground"
           onClick={() => setIsOpen(!isOpen)}
           data-testid="nav-mobile-toggle"
         >
@@ -94,9 +102,12 @@ export function Navbar() {
                 </Link>
               ))}
               <div className="pt-4 border-t border-border flex flex-col gap-4">
-                <a href="tel:02821771396" className="text-primary font-medium flex items-center gap-2">
+                <a
+                  href={`tel:${phoneDigits}`}
+                  className="text-primary font-medium flex items-center gap-2"
+                >
                   <Phone size={18} />
-                  <span>028 2177 1396</span>
+                  <span>{settings.phone}</span>
                 </a>
                 <Button asChild size="lg" className="w-full rounded-full" onClick={() => setIsOpen(false)}>
                   <Link href="/contact">Book a Visit</Link>
