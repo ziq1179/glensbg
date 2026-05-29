@@ -4,8 +4,12 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Heart, Brain, Users, ArrowRight, ShieldCheck } from "lucide-react";
 import { Link } from "wouter";
 import { motion } from "framer-motion";
+import { useSectionPhoto } from "@/hooks/useSectionPhoto";
 
 export default function Home() {
+  const heroSrc = useSectionPhoto("home-hero", "/images/hero.png");
+  const diningSrc = useSectionPhoto("life-dining", "/images/dining.png");
+
   return (
     <>
       <SEO 
@@ -51,7 +55,7 @@ export default function Home() {
             >
               <div className="aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl relative border-8 border-white dark:border-card">
                 <img 
-                  src="/images/hero.png" 
+                  src={heroSrc} 
                   alt="Glens Residential Home exterior and garden" 
                   className="w-full h-full object-cover"
                 />
@@ -142,7 +146,7 @@ export default function Home() {
               </div>
               <div className="bg-muted min-h-[300px] relative">
                 <img 
-                  src="/images/dining.png" 
+                  src={diningSrc} 
                   alt="Warm care home environment" 
                   className="absolute inset-0 w-full h-full object-cover"
                 />

@@ -3,8 +3,12 @@ import { Button } from "@/components/ui/button";
 import { Coffee, Utensils, Sun, TreePine } from "lucide-react";
 import { Link } from "wouter";
 import { motion } from "framer-motion";
+import { useSectionPhoto } from "@/hooks/useSectionPhoto";
 
 export default function LifeAtTheGlens() {
+  const diningSrc = useSectionPhoto("life-dining", "/images/dining.png");
+  const activitiesSrc = useSectionPhoto("life-activities", "/images/hero.png");
+
   return (
     <>
       <SEO 
@@ -14,7 +18,7 @@ export default function LifeAtTheGlens() {
 
       <section className="relative bg-foreground text-primary-foreground overflow-hidden">
         <div className="absolute inset-0 opacity-20">
-          <img src="/images/dining.png" alt="Background" className="w-full h-full object-cover" />
+          <img src={diningSrc} alt="Background" className="w-full h-full object-cover" />
         </div>
         <div className="absolute inset-0 bg-gradient-to-t from-foreground to-foreground/80" />
         
@@ -65,7 +69,7 @@ export default function LifeAtTheGlens() {
               viewport={{ once: true }}
               className="order-1 md:order-2 rounded-3xl overflow-hidden shadow-lg aspect-square"
             >
-              <img src="/images/dining.png" alt="Dining together" className="w-full h-full object-cover" />
+              <img src={diningSrc} alt="Dining together" className="w-full h-full object-cover" />
             </motion.div>
           </div>
 
@@ -77,8 +81,7 @@ export default function LifeAtTheGlens() {
               viewport={{ once: true }}
               className="rounded-3xl overflow-hidden shadow-lg aspect-[4/3] bg-muted relative"
             >
-               {/* using hero image as a placeholder for outdoor space */}
-              <img src="/images/hero.png" alt="Our gardens" className="w-full h-full object-cover" />
+              <img src={activitiesSrc} alt="Our gardens and activities" className="w-full h-full object-cover" />
             </motion.div>
             <motion.div 
               initial={{ opacity: 0, x: 20 }}

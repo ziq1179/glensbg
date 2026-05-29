@@ -3,8 +3,11 @@ import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import { motion } from "framer-motion";
 import { Users, Award, Shield } from "lucide-react";
+import { useSectionPhoto } from "@/hooks/useSectionPhoto";
 
 export default function MeetTheTeam() {
+  const teamSrc = useSectionPhoto("team", "/images/team.png");
+
   return (
     <>
       <SEO 
@@ -33,7 +36,7 @@ export default function MeetTheTeam() {
               transition={{ delay: 0.2 }}
               className="rounded-3xl overflow-hidden shadow-xl"
             >
-              <img src="/images/team.png" alt="Our caring team" className="w-full h-auto object-cover aspect-[4/3]" />
+              <img src={teamSrc} alt="Our caring team" className="w-full h-auto object-cover aspect-[4/3]" />
             </motion.div>
           </div>
         </div>
