@@ -3,11 +3,17 @@ import { useState, useEffect } from "react";
 export interface SiteSettings {
   phone: string;
   address: string;
+  facebook: string;
+  instagram: string;
+  twitter: string;
 }
 
 const DEFAULTS: SiteSettings = {
   phone: "028 2177 1396",
   address: "63 Middlepark Road\nCushendall, Ballymena\nBT44 0SQ",
+  facebook: "",
+  instagram: "",
+  twitter: "",
 };
 
 export function useSettings() {

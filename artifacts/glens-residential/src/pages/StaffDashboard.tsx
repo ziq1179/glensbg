@@ -26,6 +26,9 @@ import {
   Phone,
   MapPin,
   Save,
+  Facebook,
+  Instagram,
+  Twitter,
 } from "lucide-react";
 
 const SECTIONS = [
@@ -327,6 +330,106 @@ function ContactDetailsEditor() {
   );
 }
 
+function SocialLinksEditor() {
+  const { settings, save } = useSettings();
+  const { toast } = useToast();
+  const [facebook, setFacebook] = useState(settings.facebook);
+  const [instagram, setInstagram] = useState(settings.instagram);
+  const [twitter, setTwitter] = useState(settings.twitter);
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    setFacebook(settings.facebook);
+    setInstagram(settings.instagram);
+    setTwitter(settings.twitter);
+  }, [settings.facebook, settings.instagram, settings.twitter]);
+
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      await save({
+        facebook: facebook.trim(),
+        instagram: instagram.trim(),
+        twitter: twitter.trim(),
+      });
+      toast({ title: "Social links saved", description: "The footer social media links have been updated." });
+    } catch (e) {
+      toast({ title: "Failed to save", description: e instanceof Error ? e.message : "Unknown error", variant: "destructive" });
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const hasChanges =
+    facebook.trim() !== settings.facebook ||
+    instagram.trim() !== settings.instagram ||
+    twitter.trim() !== settings.twitter;
+
+  return (
+    <Card className="border border-border shadow-sm">
+      <CardContent className="p-6">
+        <div className="space-y-5">
+          <div className="space-y-1.5">
+            <label className="text-sm font-medium text-foreground flex items-center gap-2">
+              <Facebook size={14} className="text-primary" />
+              Facebook URL
+            </label>
+            <Input
+              value={facebook}
+              onChange={(e) => setFacebook(e.target.value)}
+              placeholder="https://www.facebook.com/YourPage"
+              className="bg-background"
+              data-testid="input-facebook"
+            />
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="text-sm font-medium text-foreground flex items-center gap-2">
+              <Instagram size={14} className="text-primary" />
+              Instagram URL
+            </label>
+            <Input
+              value={instagram}
+              onChange={(e) => setInstagram(e.target.value)}
+              placeholder="https://www.instagram.com/YourHandle"
+              className="bg-background"
+              data-testid="input-instagram"
+            />
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="text-sm font-medium text-foreground flex items-center gap-2">
+              <Twitter size={14} className="text-primary" />
+              X (Twitter) URL
+            </label>
+            <Input
+              value={twitter}
+              onChange={(e) => setTwitter(e.target.value)}
+              placeholder="https://x.com/YourHandle"
+              className="bg-background"
+              data-testid="input-twitter"
+            />
+          </div>
+
+          <p className="text-xs text-muted-foreground">
+            Leave a field blank to hide that icon from the footer. Paste the full URL to your profile page.
+          </p>
+
+          <Button
+            onClick={handleSave}
+            disabled={saving || !hasChanges}
+            className="rounded-full"
+            data-testid="button-save-social"
+          >
+            {saving ? <Loader2 size={14} className="mr-1.5 animate-spin" /> : <Save size={14} className="mr-1.5" />}
+            {saving ? "Saving…" : "Save Links"}
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
 export default function StaffDashboard() {
   const [, setLocation] = useLocation();
   const { user, loading, logout } = useStaffAuth();
@@ -417,6 +520,21 @@ export default function StaffDashboard() {
           </p>
           <div className="max-w-lg">
             <ContactDetailsEditor />
+          </div>
+        </div>
+      </section>
+
+      <section className="py-10 border-t border-border">
+        <div className="container mx-auto px-4 max-w-5xl">
+          <div className="flex items-center gap-2 mb-2">
+            <Facebook size={20} className="text-primary" />
+            <h2 className="text-xl font-serif font-bold text-foreground">Social Media Links</h2>
+          </div>
+          <p className="text-muted-foreground mb-8">
+            Paste the full URL to each social profile. The icon will appear in the footer automatically. Leave blank to hide it.
+          </p>
+          <div className="max-w-lg">
+            <SocialLinksEditor />
           </div>
         </div>
       </section>
