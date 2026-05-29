@@ -29,6 +29,7 @@ import {
   Facebook,
   Instagram,
   Twitter,
+  Star,
 } from "lucide-react";
 
 const SECTIONS = [
@@ -430,6 +431,66 @@ function SocialLinksEditor() {
   );
 }
 
+function ReviewUrlEditor() {
+  const { settings, save } = useSettings();
+  const { toast } = useToast();
+  const [reviewUrl, setReviewUrl] = useState(settings.review_url);
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    setReviewUrl(settings.review_url);
+  }, [settings.review_url]);
+
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      await save({ review_url: reviewUrl.trim() });
+      toast({ title: "Review link saved", description: "The QR code and review button have been updated on the website." });
+    } catch (e) {
+      toast({ title: "Failed to save", description: e instanceof Error ? e.message : "Unknown error", variant: "destructive" });
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const hasChanges = reviewUrl.trim() !== settings.review_url;
+
+  return (
+    <Card className="border border-border shadow-sm">
+      <CardContent className="p-6">
+        <div className="space-y-5">
+          <div className="space-y-1.5">
+            <label className="text-sm font-medium text-foreground flex items-center gap-2">
+              <Star size={14} className="text-primary" />
+              Google Reviews or Trustpilot URL
+            </label>
+            <Input
+              value={reviewUrl}
+              onChange={(e) => setReviewUrl(e.target.value)}
+              placeholder="https://g.page/r/your-business/review  or  https://www.trustpilot.com/review/..."
+              className="bg-background"
+              data-testid="input-review-url"
+            />
+            <p className="text-xs text-muted-foreground">
+              Paste the link where families can leave a review. A QR code and button will appear on the Contact page automatically. Leave blank to hide it.
+            </p>
+          </div>
+
+          <Button
+            onClick={handleSave}
+            disabled={saving || !hasChanges}
+            className="rounded-full"
+            data-testid="button-save-review-url"
+          >
+            {saving ? <Loader2 size={14} className="mr-1.5 animate-spin" /> : <Save size={14} className="mr-1.5" />}
+            {saving ? "Saving…" : "Save Link"}
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
 export default function StaffDashboard() {
   const [, setLocation] = useLocation();
   const { user, loading, logout } = useStaffAuth();
@@ -535,6 +596,21 @@ export default function StaffDashboard() {
           </p>
           <div className="max-w-lg">
             <SocialLinksEditor />
+          </div>
+        </div>
+      </section>
+
+      <section className="py-10 border-t border-border bg-muted/20">
+        <div className="container mx-auto px-4 max-w-5xl">
+          <div className="flex items-center gap-2 mb-2">
+            <Star size={20} className="text-primary" />
+            <h2 className="text-xl font-serif font-bold text-foreground">Review Link & QR Code</h2>
+          </div>
+          <p className="text-muted-foreground mb-8">
+            Add your Google Reviews or Trustpilot link. A "Leave a Review" button and scannable QR code will appear on the Contact page for families to use.
+          </p>
+          <div className="max-w-lg">
+            <ReviewUrlEditor />
           </div>
         </div>
       </section>

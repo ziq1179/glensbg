@@ -6,6 +6,7 @@ export interface SiteSettings {
   facebook: string;
   instagram: string;
   twitter: string;
+  review_url: string;
 }
 
 const DEFAULTS: SiteSettings = {
@@ -14,6 +15,7 @@ const DEFAULTS: SiteSettings = {
   facebook: "",
   instagram: "",
   twitter: "",
+  review_url: "",
 };
 
 export function useSettings() {

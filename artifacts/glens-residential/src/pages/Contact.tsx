@@ -8,7 +8,8 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { Phone, MapPin, ExternalLink } from "lucide-react";
+import { Phone, MapPin, ExternalLink, Star, QrCode } from "lucide-react";
+import { QRCodeSVG } from "qrcode.react";
 
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
@@ -240,6 +241,59 @@ export default function Contact() {
           </div>
         </div>
       </section>
+
+      {settings.review_url && (
+        <section className="py-16 border-t border-border">
+          <div className="container mx-auto px-4 max-w-5xl">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="grid md:grid-cols-2 gap-12 items-center"
+            >
+              <div>
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="flex text-yellow-400">
+                    {[...Array(5)].map((_, i) => <Star key={i} size={20} fill="currentColor" />)}
+                  </div>
+                </div>
+                <h2 className="text-3xl font-serif font-bold text-foreground mb-4">
+                  Share Your Experience
+                </h2>
+                <p className="text-muted-foreground text-lg leading-relaxed mb-6">
+                  Your feedback means the world to us and helps other families make informed decisions. If your loved one is a resident, we'd be grateful if you could take a moment to leave an honest review.
+                </p>
+                <a
+                  href={settings.review_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-full font-medium hover:bg-primary/90 transition-colors"
+                >
+                  <Star size={16} fill="currentColor" />
+                  Leave a Review
+                  <ExternalLink size={14} />
+                </a>
+              </div>
+
+              <div className="flex flex-col items-center gap-4">
+                <div className="bg-white p-5 rounded-2xl shadow-md border border-border inline-block">
+                  <QRCodeSVG
+                    value={settings.review_url}
+                    size={180}
+                    bgColor="#ffffff"
+                    fgColor="#1a1a1a"
+                    level="M"
+                  />
+                </div>
+                <div className="flex items-center gap-2 text-sm text-muted-foreground text-center">
+                  <QrCode size={14} />
+                  Scan to leave a review on your phone
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </section>
+      )}
 
       <section className="py-20 bg-muted/30">
         <div className="container mx-auto px-4 max-w-3xl">
