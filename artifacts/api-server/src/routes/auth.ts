@@ -44,6 +44,10 @@ router.post("/auth/login", async (req, res): Promise<void> => {
     displayName: user.displayName,
   };
 
+  await new Promise<void>((resolve, reject) =>
+    req.session.save((err) => (err ? reject(err) : resolve()))
+  );
+
   req.log.info({ username: user.username }, "Staff login successful");
   res.json({ id: user.id, username: user.username, displayName: user.displayName });
 });
