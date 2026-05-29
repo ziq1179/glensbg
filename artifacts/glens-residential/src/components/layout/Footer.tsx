@@ -1,4 +1,4 @@
-import { Phone, MapPin, ExternalLink } from "lucide-react";
+import { Phone, MapPin, ExternalLink, ShieldCheck } from "lucide-react";
 import { Link } from "wouter";
 import { useSettings } from "@/hooks/useSettings";
 
@@ -67,8 +67,16 @@ export function Footer() {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 mt-12 pt-8 border-t border-primary-foreground/20 text-center text-primary-foreground/60 text-sm">
+      <div className="container mx-auto px-4 mt-12 pt-8 border-t border-primary-foreground/20 flex flex-col sm:flex-row items-center justify-between gap-3 text-primary-foreground/60 text-sm">
         <p>&copy; {new Date().getFullYear()} Glens Properties LLP. All rights reserved.</p>
+        <Link
+          href="/staff/login"
+          className="flex items-center gap-1.5 hover:text-primary-foreground/80 transition-colors"
+          data-testid="nav-staff-login"
+        >
+          <ShieldCheck size={13} />
+          Staff Login
+        </Link>
       </div>
     </footer>
   );
