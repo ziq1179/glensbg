@@ -11,6 +11,8 @@ import LifeAtTheGlens from "@/pages/LifeAtTheGlens";
 import MeetTheTeam from "@/pages/MeetTheTeam";
 import Contact from "@/pages/Contact";
 import Careers from "@/pages/Careers";
+import StaffLogin from "@/pages/StaffLogin";
+import StaffDashboard from "@/pages/StaffDashboard";
 
 const queryClient = new QueryClient();
 
@@ -24,6 +26,8 @@ function Router() {
         <Route path="/meet-the-team" component={MeetTheTeam} />
         <Route path="/contact" component={Contact} />
         <Route path="/careers" component={Careers} />
+        <Route path="/staff/login" component={StaffLogin} />
+        <Route path="/staff/dashboard" component={StaffDashboard} />
         <Route component={NotFound} />
       </Switch>
     </Layout>

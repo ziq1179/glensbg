@@ -5,9 +5,6 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
-export interface HealthStatus {
-  status: string;
-}
 
 export interface RequestUploadUrlBody {
   /** @minLength 1 */
@@ -17,14 +14,3 @@ export interface RequestUploadUrlBody {
   /** @minLength 1 */
   contentType: string;
 }
-
-export interface RequestUploadUrlResponse {
-  uploadURL: string;
-  objectPath: string;
-  metadata?: RequestUploadUrlBody;
-}
-
-export interface ErrorEnvelope {
-  error: string;
-}
-

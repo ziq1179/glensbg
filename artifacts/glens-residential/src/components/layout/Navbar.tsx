@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { Phone, Menu, X } from "lucide-react";
+import { Phone, Menu, X, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -51,6 +51,14 @@ export function Navbar() {
           <Button asChild size="lg" className="rounded-full shadow-md" data-testid="nav-book-visit">
             <Link href="/contact">Book a Visit</Link>
           </Button>
+          <Link
+            href="/staff/login"
+            className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary transition-colors"
+            data-testid="nav-staff-login"
+          >
+            <ShieldCheck size={14} />
+            Staff
+          </Link>
         </div>
 
         {/* Mobile Toggle */}
@@ -93,6 +101,14 @@ export function Navbar() {
                 <Button asChild size="lg" className="w-full rounded-full" onClick={() => setIsOpen(false)}>
                   <Link href="/contact">Book a Visit</Link>
                 </Button>
+                <Link
+                  href="/staff/login"
+                  onClick={() => setIsOpen(false)}
+                  className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-primary transition-colors"
+                >
+                  <ShieldCheck size={14} />
+                  Staff Login
+                </Link>
               </div>
             </div>
           </motion.div>
