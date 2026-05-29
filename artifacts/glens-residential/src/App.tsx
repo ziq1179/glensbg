@@ -10,6 +10,7 @@ import OurServices from "@/pages/OurServices";
 import LifeAtTheGlens from "@/pages/LifeAtTheGlens";
 import MeetTheTeam from "@/pages/MeetTheTeam";
 import Contact from "@/pages/Contact";
+import Careers from "@/pages/Careers";
 
 const queryClient = new QueryClient();
 
@@ -22,6 +23,7 @@ function Router() {
         <Route path="/life-at-the-glens" component={LifeAtTheGlens} />
         <Route path="/meet-the-team" component={MeetTheTeam} />
         <Route path="/contact" component={Contact} />
+        <Route path="/careers" component={Careers} />
         <Route component={NotFound} />
       </Switch>
     </Layout>

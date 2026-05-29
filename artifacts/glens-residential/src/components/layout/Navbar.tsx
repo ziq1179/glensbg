@@ -13,6 +13,7 @@ export function Navbar() {
     { href: "/our-services", label: "Our Services" },
     { href: "/life-at-the-glens", label: "Life at the Glens" },
     { href: "/meet-the-team", label: "Meet the Team" },
+    { href: "/careers", label: "Careers" },
     { href: "/contact", label: "Contact & FAQ" },
   ];
 
