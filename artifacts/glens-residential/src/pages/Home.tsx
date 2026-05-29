@@ -1,7 +1,7 @@
 import { SEO } from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Heart, Brain, Users, ArrowRight, ShieldCheck } from "lucide-react";
+import { Heart, Brain, Users, ArrowRight } from "lucide-react";
 import { Link } from "wouter";
 import { motion } from "framer-motion";
 import { useSectionPhoto } from "@/hooks/useSectionPhoto";
@@ -27,10 +27,6 @@ export default function Home() {
               transition={{ duration: 0.6 }}
               className="max-w-2xl"
             >
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary/10 text-secondary font-medium text-sm mb-6">
-                <ShieldCheck size={16} />
-                <span>RQIA "Good" Rating</span>
-              </div>
               <h1 className="text-4xl lg:text-6xl font-serif font-bold text-foreground leading-tight mb-6">
                 A Place to Call Home in the <span className="text-primary">Heart of the Glens.</span>
               </h1>
@@ -59,17 +55,6 @@ export default function Home() {
                   alt="Glens Residential Home exterior and garden" 
                   className="w-full h-full object-cover"
                 />
-              </div>
-              
-              {/* Trust Badge Floating */}
-              <div className="absolute -bottom-6 -left-6 bg-card p-4 rounded-2xl shadow-xl flex items-center gap-4 max-w-[280px] border border-border">
-                <div className="bg-primary/10 p-3 rounded-full text-primary">
-                  <ShieldCheck size={24} />
-                </div>
-                <div>
-                  <p className="font-bold text-sm">Regulated by RQIA</p>
-                  <a href="https://www.rqia.org.uk" target="_blank" rel="noopener noreferrer" className="text-xs text-muted-foreground hover:text-primary underline">Verify our status</a>
-                </div>
               </div>
             </motion.div>
           </div>
