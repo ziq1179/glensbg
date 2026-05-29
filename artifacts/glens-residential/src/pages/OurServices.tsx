@@ -1,9 +1,24 @@
 import { SEO } from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Heart, Brain, Users, CheckCircle2, FileText, ArrowRight } from "lucide-react";
+import { Heart, Brain, Users, CheckCircle2, FileText, Sofa, PawPrint, CigaretteOff, ShoppingCart, Bus, Accessibility, Home, Flower2, Phone, Tv, Wifi, CarTaxiFront } from "lucide-react";
 import { Link } from "wouter";
 import { motion } from "framer-motion";
+
+const FACILITIES = [
+  { icon: Sofa,         label: "Own furniture if required" },
+  { icon: PawPrint,     label: "Pet friendly (or by arrangement)" },
+  { icon: CigaretteOff, label: "Smoking not permitted" },
+  { icon: ShoppingCart, label: "Close to local shops" },
+  { icon: Bus,          label: "Near public transport" },
+  { icon: CarTaxiFront, label: "Minibus or other transport" },
+  { icon: Accessibility,label: "Wheelchair access" },
+  { icon: Home,         label: "Ground floor accommodation only" },
+  { icon: Flower2,      label: "Gardens" },
+  { icon: Phone,        label: "Phone point in own room" },
+  { icon: Tv,           label: "Television point in own room" },
+  { icon: Wifi,         label: "Residents internet access" },
+];
 
 export default function OurServices() {
   const services = [
@@ -88,6 +103,40 @@ export default function OurServices() {
                     ))}
                   </ul>
                 </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-16 border-t border-border">
+        <div className="container mx-auto px-4 max-w-5xl">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mb-10"
+          >
+            <div className="flex items-center gap-3 mb-2">
+              <div className="w-1 h-7 bg-primary rounded-full" />
+              <h2 className="text-2xl font-serif font-bold text-foreground">Facilities</h2>
+            </div>
+          </motion.div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-5">
+            {FACILITIES.map(({ icon: Icon, label }, i) => (
+              <motion.div
+                key={label}
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.04 }}
+                className="flex items-center gap-3 text-foreground"
+              >
+                <div className="shrink-0 w-10 h-10 flex items-center justify-center rounded-full border border-border bg-muted">
+                  <Icon size={20} className="text-primary" />
+                </div>
+                <span className="text-sm font-medium">{label}</span>
               </motion.div>
             ))}
           </div>
