@@ -1,4 +1,4 @@
-import { Phone, MapPin, ExternalLink, ShieldCheck } from "lucide-react";
+import { Phone, MapPin, ExternalLink, ShieldCheck, Facebook, Instagram, Twitter } from "lucide-react";
 import { Link } from "wouter";
 import { useSettings } from "@/hooks/useSettings";
 
@@ -17,6 +17,35 @@ export function Footer() {
           <p className="text-primary-foreground/80 text-sm leading-relaxed">
             A family-run residential care home nestled in the scenic Glens of Antrim, where life is defined by dignity, belonging, and familiar faces.
           </p>
+          <div className="flex items-center gap-3 mt-2">
+            <a
+              href="https://www.facebook.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Facebook"
+              className="w-9 h-9 flex items-center justify-center rounded-full bg-primary-foreground/10 hover:bg-primary/80 transition-colors text-primary-foreground/70 hover:text-white"
+            >
+              <Facebook size={17} />
+            </a>
+            <a
+              href="https://www.instagram.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+              className="w-9 h-9 flex items-center justify-center rounded-full bg-primary-foreground/10 hover:bg-primary/80 transition-colors text-primary-foreground/70 hover:text-white"
+            >
+              <Instagram size={17} />
+            </a>
+            <a
+              href="https://www.x.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="X (Twitter)"
+              className="w-9 h-9 flex items-center justify-center rounded-full bg-primary-foreground/10 hover:bg-primary/80 transition-colors text-primary-foreground/70 hover:text-white"
+            >
+              <Twitter size={17} />
+            </a>
+          </div>
         </div>
 
         <div className="flex flex-col gap-4">
