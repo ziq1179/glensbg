@@ -1,0 +1,20 @@
+uploads = []
+outputs = []
+
+[[generated]]
+id = "YJJiRDFm9Lfl8cqT66Sun"
+uri = "file://artifacts/glens-residential/public/images/hero.png"
+type = "image"
+title = "Care home exterior and garden"
+
+[[generated]]
+id = "gXKp17VSDeQ8hDc7zwvU_"
+uri = "file://artifacts/glens-residential/public/images/dining.png"
+type = "image"
+title = "Residents dining and activities"
+
+[[generated]]
+id = "I9rg2vcCBImxwt2SOxAG2"
+uri = "file://artifacts/glens-residential/public/images/team.png"
+type = "image"
+title = "Warm and caring staff team"

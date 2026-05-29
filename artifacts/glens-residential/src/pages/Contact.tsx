@@ -1,0 +1,238 @@
+import { SEO } from "@/components/SEO";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Card, CardContent } from "@/components/ui/card";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { Phone, MapPin, Mail, ExternalLink } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { motion } from "framer-motion";
+
+const formSchema = z.object({
+  name: z.string().min(2, "Name is required"),
+  phone: z.string().min(8, "Valid phone number is required"),
+  email: z.string().email("Valid email is required"),
+  message: z.string().min(10, "Please provide a brief message"),
+});
+
+export default function Contact() {
+  const { toast } = useToast();
+  
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: "",
+      phone: "",
+      email: "",
+      message: "",
+    },
+  });
+
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    // In a real app, this would send an email or save to a DB
+    console.log(values);
+    toast({
+      title: "Message Sent",
+      description: "Thank you for getting in touch. We will respond shortly.",
+    });
+    form.reset();
+  }
+
+  return (
+    <>
+      <SEO 
+        title="Contact & FAQ" 
+        description="Get in touch with Glens Residential Home to book a visit or ask questions. Located in Cushendall, Ballymena." 
+      />
+
+      <div className="bg-muted/30 pt-16 pb-12 border-b border-border">
+        <div className="container mx-auto px-4 max-w-4xl text-center">
+          <h1 className="text-4xl lg:text-5xl font-serif font-bold text-foreground mb-6">Contact Us</h1>
+          <p className="text-lg text-muted-foreground">
+            We operate an open-door policy. Whether you want to arrange a formal visit or just have a quick chat about your options, we're here to help.
+          </p>
+        </div>
+      </div>
+
+      <section className="py-16">
+        <div className="container mx-auto px-4 max-w-6xl">
+          <div className="grid lg:grid-cols-2 gap-12">
+            
+            {/* Contact Info & Map */}
+            <motion.div 
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="space-y-8"
+            >
+              <div>
+                <h2 className="text-2xl font-serif font-bold mb-6">Get in Touch</h2>
+                <div className="space-y-6">
+                  <div className="flex items-start gap-4">
+                    <div className="bg-primary/10 p-3 rounded-full text-primary shrink-0">
+                      <MapPin size={24} />
+                    </div>
+                    <div>
+                      <h3 className="font-bold mb-1">Address</h3>
+                      <p className="text-muted-foreground leading-relaxed">
+                        Glens Residential Home<br/>
+                        63 Middlepark Road<br/>
+                        Cushendall, Ballymena<br/>
+                        BT44 0SQ
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start gap-4">
+                    <div className="bg-secondary/10 p-3 rounded-full text-secondary shrink-0">
+                      <Phone size={24} />
+                    </div>
+                    <div>
+                      <h3 className="font-bold mb-1">Phone</h3>
+                      <a href="tel:02821771396" className="text-muted-foreground hover:text-primary transition-colors text-lg">
+                        028 2177 1396
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Map Placeholder */}
+              <div className="aspect-video bg-muted rounded-2xl overflow-hidden relative border border-border shadow-sm">
+                {/* Embedded map or placeholder */}
+                <div className="absolute inset-0 flex flex-col items-center justify-center text-muted-foreground bg-accent/5">
+                  <MapPin size={48} className="mb-2 opacity-20" />
+                  <p className="font-medium">Map View</p>
+                  <p className="text-sm">63 Middlepark Road, Cushendall</p>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Contact Form */}
+            <motion.div 
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2 }}
+            >
+              <Card className="shadow-lg border-0 bg-card">
+                <CardContent className="p-8">
+                  <h2 className="text-2xl font-serif font-bold mb-6">Book a Visit or Enquire</h2>
+                  <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                      <FormField
+                        control={form.control}
+                        name="name"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Full Name</FormLabel>
+                            <FormControl>
+                              <Input placeholder="John Doe" {...field} className="bg-background" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <div className="grid grid-cols-2 gap-4">
+                        <FormField
+                          control={form.control}
+                          name="phone"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Phone Number</FormLabel>
+                              <FormControl>
+                                <Input placeholder="07..." {...field} className="bg-background" />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="email"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Email Address</FormLabel>
+                              <FormControl>
+                                <Input placeholder="john@example.com" {...field} className="bg-background" />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                      <FormField
+                        control={form.control}
+                        name="message"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Message / Enquiry</FormLabel>
+                            <FormControl>
+                              <Textarea 
+                                placeholder="How can we help you?" 
+                                className="min-h-[120px] bg-background" 
+                                {...field} 
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <Button type="submit" className="w-full rounded-full" size="lg">
+                        Submit Enquiry
+                      </Button>
+                      <p className="text-xs text-center text-muted-foreground mt-4">
+                        All data is handled in accordance with GDPR regulations.
+                      </p>
+                    </form>
+                  </Form>
+                </CardContent>
+              </Card>
+            </motion.div>
+            
+          </div>
+        </div>
+      </section>
+
+      <section className="py-20 bg-muted/30">
+        <div className="container mx-auto px-4 max-w-3xl">
+          <h2 className="text-3xl font-serif font-bold text-center mb-10">Frequently Asked Questions</h2>
+          <Accordion type="single" collapsible className="w-full bg-card rounded-2xl p-4 shadow-sm border border-border">
+            <AccordionItem value="item-1">
+              <AccordionTrigger className="text-left font-medium text-lg">Can residents bring their own furniture?</AccordionTrigger>
+              <AccordionContent className="text-muted-foreground text-base leading-relaxed">
+                Yes, absolutely. We actively encourage residents to personalise their single rooms with small items of furniture, photographs, and cherished belongings to make it truly feel like their own space.
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="item-2">
+              <AccordionTrigger className="text-left font-medium text-lg">What are the visiting hours?</AccordionTrigger>
+              <AccordionContent className="text-muted-foreground text-base leading-relaxed">
+                We operate an open-door policy. There are no strict visiting hours — family and friends are always welcome to drop in, just as they would if their loved one was living in their own house.
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="item-3">
+              <AccordionTrigger className="text-left font-medium text-lg">How is medical care handled?</AccordionTrigger>
+              <AccordionContent className="text-muted-foreground text-base leading-relaxed">
+                We coordinate closely with local GPs and district nurses who visit the home regularly. Our staff manage medication distribution and monitor residents' health, ensuring professional medical intervention is accessed immediately when needed.
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="item-4">
+              <AccordionTrigger className="text-left font-medium text-lg">Is there community involvement?</AccordionTrigger>
+              <AccordionContent className="text-muted-foreground text-base leading-relaxed">
+                Very much so. We host weekly visits from local nursery children and organise regular supported trips into Cushendall village. Remaining an active part of the local community is central to our ethos.
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="item-5">
+              <AccordionTrigger className="text-left font-medium text-lg">Is a GDPR Privacy Policy in place?</AccordionTrigger>
+              <AccordionContent className="text-muted-foreground text-base leading-relaxed">
+                Yes, all contact form data and resident information is securely handled in strict accordance with GDPR regulations to protect your family's privacy.
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        </div>
+      </section>
+    </>
+  );
+}
