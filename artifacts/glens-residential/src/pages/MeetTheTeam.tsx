@@ -97,7 +97,7 @@ export default function MeetTheTeam() {
           <p className="text-lg text-muted-foreground mb-8">
             Speak with Siobhan and the team to see if Glens Residential Home is the right fit for your loved one.
           </p>
-          <Button asChild size="xl" className="rounded-full">
+          <Button asChild size="lg" className="rounded-full">
             <Link href="/contact">Get in Touch</Link>
           </Button>
         </div>

@@ -138,7 +138,7 @@ export default function LifeAtTheGlens() {
           <p className="text-lg text-muted-foreground mb-8">
             The atmosphere of our home is best experienced in person. Join us for a cup of tea and a chat.
           </p>
-          <Button asChild size="xl" className="rounded-full">
+          <Button asChild size="lg" className="rounded-full">
             <Link href="/contact">Book a Visit</Link>
           </Button>
         </div>

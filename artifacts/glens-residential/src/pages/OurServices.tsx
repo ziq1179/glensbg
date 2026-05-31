@@ -166,7 +166,7 @@ export default function OurServices() {
           <p className="text-primary-foreground/90 text-lg mb-8 max-w-2xl mx-auto">
             Choosing the right care home is a significant decision. We're here to talk through your specific requirements without any obligation.
           </p>
-          <Button asChild size="xl" variant="secondary" className="rounded-full px-8 text-secondary-foreground">
+          <Button asChild size="lg" variant="secondary" className="rounded-full px-8 text-secondary-foreground">
             <Link href="/contact">Contact Us Today</Link>
           </Button>
         </div>

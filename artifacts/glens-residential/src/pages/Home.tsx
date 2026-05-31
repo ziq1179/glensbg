@@ -34,10 +34,10 @@ export default function Home() {
                 Nestled in the scenic beauty of Middlepark Road, our 16-bed, purpose-built home offers a safe and tranquil environment. We pride ourselves on being a community where life is defined by dignity and a true sense of belonging.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button asChild size="xl" className="rounded-full text-lg px-8 py-6 shadow-md">
+                <Button asChild size="lg" className="rounded-full text-lg px-8 py-6 shadow-md">
                   <Link href="/contact">Book a Visit</Link>
                 </Button>
-                <Button asChild variant="outline" size="xl" className="rounded-full text-lg px-8 py-6">
+                <Button asChild variant="outline" size="lg" className="rounded-full text-lg px-8 py-6">
                   <Link href="/our-services">Explore Services</Link>
                 </Button>
               </div>
@@ -125,7 +125,7 @@ export default function Home() {
                 <p className="text-muted-foreground text-lg mb-8">
                   The best way to understand the warmth of our home is to see it for yourself. We'd love to show you around and answer any questions you might have.
                 </p>
-                <Button asChild size="xl" className="rounded-full w-fit px-8">
+                <Button asChild size="lg" className="rounded-full w-fit px-8">
                   <Link href="/contact">Book a Visit</Link>
                 </Button>
               </div>
