@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 
+export type ThemeColor = "green" | "navy";
+
 export interface SiteSettings {
   phone: string;
   address: string;
@@ -7,6 +9,7 @@ export interface SiteSettings {
   instagram: string;
   twitter: string;
   review_url: string;
+  theme: ThemeColor;
 }
 
 const DEFAULTS: SiteSettings = {
@@ -16,6 +19,7 @@ const DEFAULTS: SiteSettings = {
   instagram: "",
   twitter: "",
   review_url: "",
+  theme: "green",
 };
 
 export function useSettings() {

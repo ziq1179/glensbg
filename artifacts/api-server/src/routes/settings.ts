@@ -6,7 +6,7 @@ import { requireAuth } from "../middlewares/requireAuth";
 
 const router: IRouter = Router();
 
-const ALLOWED_KEYS = ["phone", "address", "facebook", "instagram", "twitter", "review_url"] as const;
+const ALLOWED_KEYS = ["phone", "address", "facebook", "instagram", "twitter", "review_url", "theme"] as const;
 
 async function getAllSettings(): Promise<Record<string, string>> {
   const rows = await db.select().from(siteSettingsTable);
@@ -25,6 +25,7 @@ const UpdateSettingsBody = z.object({
   instagram: z.string().optional(),
   twitter: z.string().optional(),
   review_url: z.string().optional(),
+  theme: z.enum(["green", "navy"]).optional(),
 });
 
 router.put("/settings", requireAuth, async (req, res): Promise<void> => {

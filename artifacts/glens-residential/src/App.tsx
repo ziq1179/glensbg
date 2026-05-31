@@ -4,6 +4,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { useEffect } from "react";
 import NotFound from "@/pages/not-found";
+import { useSettings } from "@/hooks/useSettings";
 
 import { Layout } from "@/components/layout/Layout";
 import Home from "@/pages/Home";
@@ -17,6 +18,19 @@ import StaffDashboard from "@/pages/StaffDashboard";
 
 const queryClient = new QueryClient();
 
+function ThemeApplier() {
+  const { settings } = useSettings();
+  useEffect(() => {
+    const el = document.documentElement;
+    if (settings.theme === "navy") {
+      el.classList.add("theme-navy");
+    } else {
+      el.classList.remove("theme-navy");
+    }
+  }, [settings.theme]);
+  return null;
+}
+
 function ScrollToTop() {
   const [location] = useLocation();
   useEffect(() => {
@@ -28,6 +42,7 @@ function ScrollToTop() {
 function Router() {
   return (
     <Layout>
+      <ThemeApplier />
       <ScrollToTop />
       <Switch>
         <Route path="/" component={Home} />

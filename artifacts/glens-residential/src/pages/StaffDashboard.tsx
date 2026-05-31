@@ -30,7 +30,9 @@ import {
   Instagram,
   Twitter,
   Star,
+  Palette,
 } from "lucide-react";
+import type { ThemeColor } from "@/hooks/useSettings";
 
 const SECTIONS = [
   {
@@ -431,6 +433,78 @@ function SocialLinksEditor() {
   );
 }
 
+const THEMES: { id: ThemeColor; label: string; description: string; primary: string; bg: string; accent: string }[] = [
+  {
+    id: "green",
+    label: "Original Green",
+    description: "Warm sage green — the current website palette",
+    primary: "#6b9e7a",
+    bg: "#f8f5ec",
+    accent: "#5a8bae",
+  },
+  {
+    id: "navy",
+    label: "Navy Blue",
+    description: "Deep navy blue with a gold accent",
+    primary: "#1e3a8a",
+    bg: "#f5f8fc",
+    accent: "#d97706",
+  },
+];
+
+function ThemePicker() {
+  const { settings, save } = useSettings();
+  const { toast } = useToast();
+  const [saving, setSaving] = useState(false);
+
+  const handleSelect = async (theme: ThemeColor) => {
+    if (theme === settings.theme) return;
+    setSaving(true);
+    try {
+      await save({ theme });
+      toast({ title: "Theme updated", description: `Switched to the ${theme === "navy" ? "Navy Blue" : "Original Green"} theme.` });
+    } catch (e) {
+      toast({ title: "Failed to save", description: e instanceof Error ? e.message : "Unknown error", variant: "destructive" });
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <div className="grid sm:grid-cols-2 gap-4">
+      {THEMES.map((t) => {
+        const active = settings.theme === t.id;
+        return (
+          <button
+            key={t.id}
+            onClick={() => handleSelect(t.id)}
+            disabled={saving}
+            className={[
+              "relative text-left rounded-2xl border-2 p-5 transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+              active
+                ? "border-primary shadow-md"
+                : "border-border hover:border-muted-foreground/40 hover:shadow-sm",
+            ].join(" ")}
+          >
+            {active && (
+              <span className="absolute top-3 right-3 flex items-center gap-1 text-xs font-semibold text-primary">
+                <CheckCircle size={13} className="fill-primary/20" /> Active
+              </span>
+            )}
+            <div className="flex gap-2 mb-3">
+              <div className="w-8 h-8 rounded-full border border-border/40 shadow-sm" style={{ background: t.bg }} />
+              <div className="w-8 h-8 rounded-full border border-border/40 shadow-sm" style={{ background: t.primary }} />
+              <div className="w-8 h-8 rounded-full border border-border/40 shadow-sm" style={{ background: t.accent }} />
+            </div>
+            <p className="font-semibold text-foreground text-sm">{t.label}</p>
+            <p className="text-xs text-muted-foreground mt-0.5">{t.description}</p>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
 function ReviewUrlEditor() {
   const { settings, save } = useSettings();
   const { toast } = useToast();
@@ -571,6 +645,19 @@ export default function StaffDashboard() {
       </section>
 
       <section className="py-10 border-t border-border bg-muted/20">
+        <div className="container mx-auto px-4 max-w-5xl">
+          <div className="flex items-center gap-2 mb-2">
+            <Palette size={20} className="text-primary" />
+            <h2 className="text-xl font-serif font-bold text-foreground">Website Theme</h2>
+          </div>
+          <p className="text-muted-foreground mb-8">
+            Choose the colour palette for the entire website. The change takes effect immediately for all visitors.
+          </p>
+          <ThemePicker />
+        </div>
+      </section>
+
+      <section className="py-10 border-t border-border">
         <div className="container mx-auto px-4 max-w-5xl">
           <div className="flex items-center gap-2 mb-2">
             <Phone size={20} className="text-primary" />
