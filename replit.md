@@ -38,6 +38,17 @@ Website for Glens Residential Care Home — allows staff to manage photos and si
 - Object storage via Replit GCS bucket for photo uploads
 - `NEON_DATABASE_URL` is stored as a Replit secret and used only for schema pushes and Render deployment
 
+## Render production configuration
+
+The live API service (`glensbg`, `srv-d8e0us77f7vs73cmqnrg`) has the following env vars set directly on Render:
+
+| Variable | Value |
+|---|---|
+| `DATABASE_URL` | The bare `postgresql://...` Neon connection string (extracted from `NEON_DATABASE_URL` by stripping the `psql '...'` wrapper) |
+| `SESSION_SECRET` | Strong random value (base64, 48 bytes) — stored in Replit secrets as `SESSION_SECRET` |
+
+These are set via the Render dashboard / API and are **not** committed to the repo. `NODE_ENV=production` is set by the Render runtime. The `session` table is auto-created by `connect-pg-simple` (`createTableIfMissing: true`) on first boot. The admin user and default `site_settings` rows are seeded in Neon from a prior task.
+
 ## Product
 
 Staff can log in, manage site photos (upload/delete by section), and edit contact settings. The public frontend displays the care home's information and gallery.
