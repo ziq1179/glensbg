@@ -38,28 +38,12 @@ export const RequestUploadUrlBody = zod.object({
 
 export const RequestUploadUrlResponse = zod.object({
   "uploadURL": zod.string(),
-  "objectPath": zod.string(),
+  "uploadParams": zod.record(zod.string(), zod.unknown()),
   "metadata": zod.object({
   "name": zod.string().min(1),
   "size": zod.number().min(1),
   "contentType": zod.string().min(1)
 }).optional()
-})
-
-
-/**
- * @summary Serve a public asset
- */
-export const GetPublicObjectParams = zod.object({
-  "filePath": zod.coerce.string()
-})
-
-
-/**
- * @summary Serve an object entity
- */
-export const GetStorageObjectParams = zod.object({
-  "objectPath": zod.coerce.string()
 })
 
 

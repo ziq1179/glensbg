@@ -18,9 +18,11 @@ export interface RequestUploadUrlBody {
   contentType: string;
 }
 
+export type RequestUploadUrlResponseUploadParams = { [key: string]: unknown };
+
 export interface RequestUploadUrlResponse {
   uploadURL: string;
-  objectPath: string;
+  uploadParams: RequestUploadUrlResponseUploadParams;
   metadata?: RequestUploadUrlBody;
 }
 

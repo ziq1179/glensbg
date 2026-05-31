@@ -6,9 +6,10 @@
  * OpenAPI spec version: 0.1.0
  */
 import type { RequestUploadUrlBody } from './requestUploadUrlBody';
+import type { RequestUploadUrlResponseUploadParams } from './requestUploadUrlResponseUploadParams';
 
 export interface RequestUploadUrlResponse {
   uploadURL: string;
-  objectPath: string;
+  uploadParams: RequestUploadUrlResponseUploadParams;
   metadata?: RequestUploadUrlBody;
 }

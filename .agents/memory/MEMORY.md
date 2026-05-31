@@ -1,2 +1,3 @@
 - [Glens Residential Auth Setup](glens-auth.md) — session auth uses express-session + connect-pg-simple; default staff credentials seeded on first boot.
 - [Object Storage Setup](object-storage-setup.md) — GCS bucket provisioned; api-zod index exports only from generated/api to avoid duplicate type conflict with generated/types.
+- [Cloudinary Photo Storage](cloudinary-photo-storage.md) — GCS replaced with Cloudinary; objectPath in DB is now full https:// URL for new uploads; old /objects/... paths handled with resolvePhotoUrl() fallback.

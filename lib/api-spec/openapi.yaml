@@ -56,56 +56,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorEnvelope"
-  /storage/public-objects/{filePath}:
-    get:
-      tags: [Storage]
-      operationId: getPublicObject
-      summary: Serve a public asset
-      parameters:
-        - name: filePath
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Object content streamed.
-          content:
-            "*/*":
-              schema:
-                type: string
-                format: binary
-        "404":
-          description: File not found.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorEnvelope"
-  /storage/objects/{objectPath}:
-    get:
-      tags: [Storage]
-      operationId: getStorageObject
-      summary: Serve an object entity
-      parameters:
-        - name: objectPath
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Object content streamed.
-          content:
-            "*/*":
-              schema:
-                type: string
-                format: binary
-        "404":
-          description: Object not found.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorEnvelope"
+
 components:
   schemas:
     HealthStatus:
@@ -130,12 +81,13 @@ components:
           minLength: 1
     RequestUploadUrlResponse:
       type: object
-      required: [uploadURL, objectPath]
+      required: [uploadURL, uploadParams]
       properties:
         uploadURL:
           type: string
-        objectPath:
-          type: string
+        uploadParams:
+          type: object
+          additionalProperties: true
         metadata:
           $ref: "#/components/schemas/RequestUploadUrlBody"
     ErrorEnvelope:

@@ -84,21 +84,25 @@ function PhotoUploader({
 
     setUploading(true);
     try {
-      const urlRes = await fetch("/api/storage/uploads/request-url", {
+      const paramsRes = await fetch("/api/storage/uploads/request-url", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
         body: JSON.stringify({ name: file.name, size: file.size, contentType: file.type }),
       });
-      if (!urlRes.ok) throw new Error("Failed to get upload URL");
-      const { uploadURL, objectPath } = await urlRes.json();
+      if (!paramsRes.ok) throw new Error("Failed to get upload parameters");
+      const { uploadURL, uploadParams } = await paramsRes.json();
 
-      const uploadRes = await fetch(uploadURL, {
-        method: "PUT",
-        headers: { "Content-Type": file.type },
-        body: file,
-      });
-      if (!uploadRes.ok) throw new Error("Upload to storage failed");
+      const formData = new FormData();
+      formData.append("file", file);
+      for (const [key, value] of Object.entries(uploadParams as Record<string, string>)) {
+        formData.append(key, value);
+      }
+
+      const uploadRes = await fetch(uploadURL, { method: "POST", body: formData });
+      if (!uploadRes.ok) throw new Error("Upload to Cloudinary failed");
+      const uploadData = await uploadRes.json() as { secure_url: string };
+      const objectPath = uploadData.secure_url;
 
       const saveRes = await fetch("/api/photos", {
         method: "POST",
@@ -155,10 +159,17 @@ function PhotoUploader({
   );
 }
 
+function resolvePhotoUrl(objectPath: string): string {
+  if (objectPath.startsWith("http://") || objectPath.startsWith("https://")) {
+    return objectPath;
+  }
+  return `/api/storage${objectPath}`;
+}
+
 function PhotoCard({ photo, onDelete }: { photo: SitePhoto; onDelete: () => void }) {
   const { toast } = useToast();
   const [deleting, setDeleting] = useState(false);
-  const imgUrl = `/api/storage${photo.objectPath}`;
+  const imgUrl = resolvePhotoUrl(photo.objectPath);
 
   const handleDelete = async () => {
     setDeleting(true);

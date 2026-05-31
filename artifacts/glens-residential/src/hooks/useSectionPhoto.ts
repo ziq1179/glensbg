@@ -1,5 +1,12 @@
 import { useState, useEffect } from "react";
 
+function resolvePhotoUrl(objectPath: string): string {
+  if (objectPath.startsWith("http://") || objectPath.startsWith("https://")) {
+    return objectPath;
+  }
+  return `/api/storage${objectPath}`;
+}
+
 export function useSectionPhoto(section: string, fallback: string): string {
   const [src, setSrc] = useState(fallback);
 
@@ -8,7 +15,7 @@ export function useSectionPhoto(section: string, fallback: string): string {
       .then((r) => (r.ok ? r.json() : []))
       .then((rows: Array<{ objectPath: string }>) => {
         if (rows.length > 0) {
-          setSrc(`/api/storage${rows[0].objectPath}`);
+          setSrc(resolvePhotoUrl(rows[0].objectPath));
         }
       })
       .catch(() => {});
