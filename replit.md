@@ -1,6 +1,6 @@
-# [Project name]
+# Glens Residential
 
-_Replace the heading above with the project's name, and this line with one sentence describing what this app does for users._
+Website for Glens Residential Care Home — allows staff to manage photos and site settings, with a public-facing frontend.
 
 ## Run & Operate
 
@@ -8,8 +8,10 @@ _Replace the heading above with the project's name, and this line with one sente
 - `pnpm run typecheck` — full typecheck across all packages
 - `pnpm run build` — typecheck + build all packages
 - `pnpm --filter @workspace/api-spec run codegen` — regenerate API hooks and Zod schemas from the OpenAPI spec
-- `pnpm --filter @workspace/db run push` — push DB schema changes (dev only)
-- Required env: `DATABASE_URL` — Postgres connection string
+- `pnpm --filter @workspace/db run push` — push DB schema changes to the dev (Replit) database
+- `pnpm --filter @workspace/db run push:production` — push DB schema changes to the Neon production database (requires `NEON_DATABASE_URL` secret)
+- Required env: `DATABASE_URL` — Postgres connection string (Replit-managed dev DB)
+- Required secret: `NEON_DATABASE_URL` — Neon production database connection string (for Render deployment)
 
 ## Stack
 
@@ -22,15 +24,23 @@ _Replace the heading above with the project's name, and this line with one sente
 
 ## Where things live
 
-_Populate as you build — short repo map plus pointers to the source-of-truth file for DB schema, API contracts, theme files, etc._
+- `lib/db/src/schema/` — source of truth for all DB tables (staff_users, site_settings, site_photos)
+- `lib/db/drizzle.config.ts` — Drizzle Kit config (reads DATABASE_URL)
+- `artifacts/api-server/src/` — Express API routes, auth middleware, seed
+- `artifacts/glens-residential/` — React + Vite frontend
+- `lib/api-spec/` — OpenAPI spec (source of truth for API contract)
 
 ## Architecture decisions
 
-_Populate as you build — non-obvious choices a reader couldn't infer from the code (3-5 bullets)._
+- Session auth via `express-session` + `connect-pg-simple`; `session` table is auto-created on first boot (`createTableIfMissing: true`)
+- Default staff user (`admin` / `glens2025`) is seeded on first boot when `staff_users` is empty
+- Production DB is Neon (PostgreSQL); dev DB is Replit-managed PostgreSQL
+- Object storage via Replit GCS bucket for photo uploads
+- `NEON_DATABASE_URL` is stored as a Replit secret and used only for schema pushes and Render deployment
 
 ## Product
 
-_Describe the high-level user-facing capabilities of this app once they exist._
+Staff can log in, manage site photos (upload/delete by section), and edit contact settings. The public frontend displays the care home's information and gallery.
 
 ## User preferences
 
@@ -38,7 +48,10 @@ _Populate as you build — explicit user instructions worth remembering across s
 
 ## Gotchas
 
-_Populate as you build — sharp edges, "always run X before Y" rules._
+- `NEON_DATABASE_URL` secret was originally pasted as a `psql '...'` command — the raw URL must be extracted with `sed "s/^psql '//;s/'$//"` if re-pasted in that format. Render needs the bare `postgresql://...` string.
+- `connect-pg-simple` + esbuild: esbuild rebases `__dirname` to `dist/`, so `table.sql` must be copied into `dist/` in `build.mjs`
+- Always call `req.session.save()` before responding after login — without it, the session write races the next request
+- `pnpm run push:production` uses `NEON_DATABASE_URL`; `pnpm run push` uses `DATABASE_URL` (dev)
 
 ## Pointers
 

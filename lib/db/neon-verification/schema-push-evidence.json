@@ -1,0 +1,45 @@
+{
+  "task": "Push Neon production database schema",
+  "verified_at": "2026-05-31T12:58:20.729Z",
+  "push_result": "No changes detected (schema already applied — initial push output: [✓] Changes applied)",
+  "neon_tables": {
+    "site_photos": [
+      { "column": "id", "type": "integer", "nullable": "NO" },
+      { "column": "section", "type": "text", "nullable": "NO" },
+      { "column": "label", "type": "text", "nullable": "NO" },
+      { "column": "object_path", "type": "text", "nullable": "NO" },
+      { "column": "uploaded_by", "type": "text", "nullable": "NO" },
+      { "column": "created_at", "type": "timestamp with time zone", "nullable": "NO" }
+    ],
+    "site_settings": [
+      { "column": "id", "type": "integer", "nullable": "NO" },
+      { "column": "key", "type": "text", "nullable": "NO" },
+      { "column": "value", "type": "text", "nullable": "NO" },
+      { "column": "updated_at", "type": "timestamp with time zone", "nullable": "NO" }
+    ],
+    "staff_users": [
+      { "column": "id", "type": "integer", "nullable": "NO" },
+      { "column": "username", "type": "text", "nullable": "NO" },
+      { "column": "password_hash", "type": "text", "nullable": "NO" },
+      { "column": "display_name", "type": "text", "nullable": "NO" },
+      { "column": "created_at", "type": "timestamp with time zone", "nullable": "NO" }
+    ],
+    "session": "auto-created by connect-pg-simple (createTableIfMissing: true) on first Render boot"
+  },
+  "seed_data_applied": {
+    "staff_users": [
+      { "username": "admin", "display_name": "Admin Staff" }
+    ],
+    "site_settings": [
+      { "key": "address" },
+      { "key": "phone" }
+    ]
+  },
+  "notes": [
+    "Schema pushed using: DATABASE_URL=$NEON_DATABASE_URL drizzle-kit push --force",
+    "Staff user seeded with bcrypt-hashed password (glens2025) — ready for staff login on Render",
+    "Default site settings (phone, address) seeded — settings page will load without errors",
+    "session table not in Drizzle schema — connect-pg-simple creates it automatically on API server startup",
+    "NEON_DATABASE_URL must be set as DATABASE_URL on Render for the live site to use this database"
+  ]
+}
