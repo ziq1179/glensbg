@@ -31,6 +31,7 @@ import {
   Twitter,
   Star,
   Palette,
+  AlertCircle,
 } from "lucide-react";
 import type { ThemeColor } from "@/hooks/useSettings";
 
@@ -61,6 +62,34 @@ const SECTIONS = [
   },
 ];
 
+function friendlyUploadError(raw: unknown): string {
+  const msg = raw instanceof Error ? raw.message : String(raw ?? "");
+  const lower = msg.toLowerCase();
+
+  if (lower.includes("file size too large") || lower.includes("maximum is")) {
+    return "File too large — maximum 10 MB. Please resize or compress the image and try again.";
+  }
+  if (
+    lower.includes("invalid image") ||
+    lower.includes("not an image") ||
+    lower.includes("unsupported") ||
+    lower.includes("invalid file")
+  ) {
+    return "Unsupported format — please use JPG, PNG, or WEBP.";
+  }
+  if (lower.includes("network") || lower.includes("failed to fetch") || lower.includes("load failed")) {
+    return "Network error — check your connection and try again.";
+  }
+  if (lower.includes("failed to get upload") || lower.includes("500")) {
+    return "Server error — could not prepare the upload. Please try again in a moment.";
+  }
+  if (lower.includes("failed to save photo")) {
+    return "Upload succeeded but the photo could not be saved. Please try again.";
+  }
+  if (msg) return msg;
+  return "Upload failed — please try again.";
+}
+
 function PhotoUploader({
   section,
   onUploaded,
@@ -71,14 +100,17 @@ function PhotoUploader({
   const { toast } = useToast();
   const [uploading, setUploading] = useState(false);
   const [dragOver, setDragOver] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
 
   const handleFile = async (file: File) => {
+    setUploadError(null);
+
     if (!file.type.startsWith("image/")) {
-      toast({ title: "Invalid file", description: "Please select an image file.", variant: "destructive" });
+      setUploadError("Unsupported format — please use JPG, PNG, or WEBP.");
       return;
     }
     if (file.size > 10 * 1024 * 1024) {
-      toast({ title: "File too large", description: "Max file size is 10MB.", variant: "destructive" });
+      setUploadError("File too large — maximum 10 MB. Please resize or compress the image and try again.");
       return;
     }
 
@@ -90,17 +122,31 @@ function PhotoUploader({
         credentials: "include",
         body: JSON.stringify({ name: file.name, size: file.size, contentType: file.type }),
       });
-      if (!paramsRes.ok) throw new Error("Failed to get upload parameters");
-      const { uploadURL, uploadParams } = await paramsRes.json();
+      if (!paramsRes.ok) {
+        let serverMsg = "Server error — could not prepare the upload. Please try again in a moment.";
+        try {
+          const body = await paramsRes.json() as { error?: string };
+          if (body.error) serverMsg = body.error;
+        } catch { /* ignore parse errors */ }
+        throw new Error(serverMsg);
+      }
+      const { uploadURL, uploadParams } = await paramsRes.json() as { uploadURL: string; uploadParams: Record<string, string> };
 
       const formData = new FormData();
       formData.append("file", file);
-      for (const [key, value] of Object.entries(uploadParams as Record<string, string>)) {
+      for (const [key, value] of Object.entries(uploadParams)) {
         formData.append(key, value);
       }
 
       const uploadRes = await fetch(uploadURL, { method: "POST", body: formData });
-      if (!uploadRes.ok) throw new Error("Upload to Cloudinary failed");
+      if (!uploadRes.ok) {
+        let cloudinaryMsg = "Upload failed — please try again.";
+        try {
+          const body = await uploadRes.json() as { error?: { message?: string } };
+          if (body.error?.message) cloudinaryMsg = friendlyUploadError(new Error(body.error.message));
+        } catch { /* ignore parse errors */ }
+        throw new Error(cloudinaryMsg);
+      }
       const uploadData = await uploadRes.json() as { secure_url: string };
       const objectPath = uploadData.secure_url;
 
@@ -115,46 +161,62 @@ function PhotoUploader({
       toast({ title: "Photo uploaded", description: `${file.name} is now live on the website.` });
       onUploaded();
     } catch (e: unknown) {
-      toast({
-        title: "Upload failed",
-        description: e instanceof Error ? e.message : "Please try again.",
-        variant: "destructive",
-      });
+      setUploadError(friendlyUploadError(e));
     } finally {
       setUploading(false);
     }
   };
 
   return (
-    <div
-      onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
-      onDragLeave={() => setDragOver(false)}
-      onDrop={(e) => { e.preventDefault(); setDragOver(false); const f = e.dataTransfer.files?.[0]; if (f) handleFile(f); }}
-      onClick={() => {
-        if (uploading) return;
-        const inp = document.createElement("input");
-        inp.type = "file";
-        inp.accept = "image/*";
-        inp.onchange = () => { if (inp.files?.[0]) handleFile(inp.files[0]); };
-        inp.click();
-      }}
-      data-testid={`upload-zone-${section}`}
-      className={`
-        flex flex-col items-center justify-center gap-2 p-6 rounded-xl border-2 border-dashed cursor-pointer
-        transition-all duration-200 select-none text-center
-        ${uploading ? "opacity-60 cursor-not-allowed" : ""}
-        ${dragOver ? "border-primary bg-primary/10 scale-[1.01]" : "border-border bg-muted/30 hover:border-primary/50 hover:bg-primary/5"}
-      `}
-    >
-      {uploading ? (
-        <Loader2 size={28} className="animate-spin text-primary" />
-      ) : (
-        <Upload size={28} className={dragOver ? "text-primary" : "text-muted-foreground"} />
+    <div className="space-y-2">
+      <div
+        onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+        onDragLeave={() => setDragOver(false)}
+        onDrop={(e) => {
+          e.preventDefault();
+          setDragOver(false);
+          const f = e.dataTransfer.files?.[0];
+          if (f) handleFile(f);
+        }}
+        onClick={() => {
+          if (uploading) return;
+          const inp = document.createElement("input");
+          inp.type = "file";
+          inp.accept = "image/*";
+          inp.onchange = () => {
+            if (inp.files?.[0]) handleFile(inp.files[0]);
+          };
+          inp.click();
+        }}
+        data-testid={`upload-zone-${section}`}
+        className={`
+          flex flex-col items-center justify-center gap-2 p-6 rounded-xl border-2 border-dashed cursor-pointer
+          transition-all duration-200 select-none text-center
+          ${uploading ? "opacity-60 cursor-not-allowed" : ""}
+          ${uploadError ? "border-destructive/50 bg-destructive/5" : dragOver ? "border-primary bg-primary/10 scale-[1.01]" : "border-border bg-muted/30 hover:border-primary/50 hover:bg-primary/5"}
+        `}
+      >
+        {uploading ? (
+          <Loader2 size={28} className="animate-spin text-primary" />
+        ) : (
+          <Upload size={28} className={uploadError ? "text-destructive/70" : dragOver ? "text-primary" : "text-muted-foreground"} />
+        )}
+        <p className="text-sm font-medium text-foreground">
+          {uploading ? "Uploading…" : dragOver ? "Drop to upload" : "Drag & drop or click to upload"}
+        </p>
+        <p className="text-xs text-muted-foreground">JPG, PNG, WEBP — max 10MB</p>
+      </div>
+
+      {uploadError && (
+        <div
+          role="alert"
+          data-testid={`upload-error-${section}`}
+          className="flex items-start gap-2 rounded-lg border border-destructive/30 bg-destructive/5 px-3 py-2.5 text-sm text-destructive"
+        >
+          <AlertCircle size={15} className="mt-0.5 shrink-0" />
+          <span>{uploadError}</span>
+        </div>
       )}
-      <p className="text-sm font-medium text-foreground">
-        {uploading ? "Uploading…" : dragOver ? "Drop to upload" : "Drag & drop or click to upload"}
-      </p>
-      <p className="text-xs text-muted-foreground">JPG, PNG, WEBP — max 10MB</p>
     </div>
   );
 }
