@@ -1,0 +1,26 @@
+{"level":30,"time":1780282455152,"pid":70,"hostname":"srv-d8e0us77f7vs73cmqnrg-85d85f9bbf-6ptbr","req":{"id":5,"method":"GET","url":"/"},"res":{"statusCode":404},"responseTime":2,"msg":"request completed"}
+Error: ENOENT: no such file or directory, stat '/opt/render/project/src/artifacts/glens-residential/dist/public/index.html'
+==> Deploying...
+==> Setting WEB_CONCURRENCY=1 by default, based on available CPUs in the instance
+==> Running 'node --enable-source-maps artifacts/api-server/dist/index.mjs'
+{"level":30,"time":1780282712791,"pid":70,"hostname":"srv-d8e0us77f7vs73cmqnrg-7698996fd4-ft6lb","port":10000,"msg":"Server listening"}
+(node:70) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
+In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
+To prepare for this change:
+- If you want the current behavior, explicitly use 'sslmode=verify-full'
+- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
+See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
+(Use `node --trace-warnings ...` to show where the warning was created)
+{"level":30,"time":1780282713065,"pid":70,"hostname":"srv-d8e0us77f7vs73cmqnrg-7698996fd4-ft6lb","req":{"id":1,"method":"HEAD","url":"/"},"res":{"statusCode":404},"responseTime":28,"msg":"request completed"}
+Error: ENOENT: no such file or directory, stat '/opt/render/project/src/artifacts/glens-residential/dist/public/index.html'
+==> Your service is live 🎉
+==> 
+==> ///////////////////////////////////////////////////////////
+==> 
+==> Available at your primary URL https://https-github-com-ziq1179-glensbg-git.onrender.com
+==> 
+Error: ENOENT: no such file or directory, stat '/opt/render/project/src/artifacts/glens-residential/dist/public/index.html'
+{"level":30,"time":1780282722970,"pid":70,"hostname":"srv-d8e0us77f7vs73cmqnrg-85d85f9bbf-6ptbr","req":{"id":6,"method":"GET","url":"/"},"res":{"statusCode":404},"responseTime":2,"msg":"request completed"}
+==> ///////////////////////////////////////////////////////////
+{"level":30,"time":1780282758444,"pid":70,"hostname":"srv-d8e0us77f7vs73cmqnrg-7698996fd4-ft6lb","req":{"id":2,"method":"GET","url":"/"},"res":{"statusCode":404},"responseTime":3,"msg":"request completed"}
+Error: ENOENT: no such file or directory, stat '/opt/render/project/src/artifacts/glens-residential/dist/public/index.html'
