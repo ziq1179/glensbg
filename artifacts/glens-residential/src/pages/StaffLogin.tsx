@@ -7,6 +7,7 @@ import { useStaffAuth } from "@/hooks/useStaffAuth";
 import { SEO } from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Lock, Eye, EyeOff, ShieldCheck } from "lucide-react";
@@ -15,6 +16,7 @@ import { motion } from "framer-motion";
 const schema = z.object({
   username: z.string().min(1, "Username is required"),
   password: z.string().min(1, "Password is required"),
+  rememberMe: z.boolean().default(false),
 });
 
 type FormValues = z.infer<typeof schema>;
@@ -27,13 +29,13 @@ export default function StaffLogin() {
 
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
-    defaultValues: { username: "", password: "" },
+    defaultValues: { username: "", password: "", rememberMe: false },
   });
 
   const onSubmit = async (values: FormValues) => {
     setServerError(null);
     try {
-      await login(values.username, values.password);
+      await login(values.username, values.password, values.rememberMe);
       setLocation("/staff/dashboard");
     } catch (e: unknown) {
       setServerError(e instanceof Error ? e.message : "Login failed");
@@ -111,6 +113,26 @@ export default function StaffLogin() {
                           </div>
                         </FormControl>
                         <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="rememberMe"
+                    render={({ field }) => (
+                      <FormItem className="flex items-center gap-2.5">
+                        <FormControl>
+                          <Checkbox
+                            id="remember-me"
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                            data-testid="checkbox-remember-me"
+                          />
+                        </FormControl>
+                        <FormLabel htmlFor="remember-me" className="!mt-0 cursor-pointer font-normal text-sm">
+                          Remember me for 30 days
+                        </FormLabel>
                       </FormItem>
                     )}
                   />

@@ -10,7 +10,11 @@ const router: IRouter = Router();
 const LoginBody = z.object({
   username: z.string().min(1),
   password: z.string().min(1),
+  rememberMe: z.boolean().optional().default(false),
 });
+
+const EIGHT_HOURS_MS = 8 * 60 * 60 * 1000;
+const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000;
 
 router.post("/auth/login", async (req, res): Promise<void> => {
   const parsed = LoginBody.safeParse(req.body);
@@ -19,7 +23,7 @@ router.post("/auth/login", async (req, res): Promise<void> => {
     return;
   }
 
-  const { username, password } = parsed.data;
+  const { username, password, rememberMe } = parsed.data;
 
   const [user] = await db
     .select()
@@ -43,6 +47,8 @@ router.post("/auth/login", async (req, res): Promise<void> => {
     username: user.username,
     displayName: user.displayName,
   };
+
+  req.session.cookie.maxAge = rememberMe ? THIRTY_DAYS_MS : EIGHT_HOURS_MS;
 
   await new Promise<void>((resolve, reject) =>
     req.session.save((err) => (err ? reject(err) : resolve()))
