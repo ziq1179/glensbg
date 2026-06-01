@@ -321,9 +321,21 @@ function SectionPanel({ section }: { section: (typeof SECTIONS)[number] }) {
         )}
 
         {!loading && photos.length === 0 && (
-          <p className="text-center text-sm text-muted-foreground mt-4 py-2">
-            No photos yet for this section.
-          </p>
+          <motion.div
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.25 }}
+            data-testid={`empty-state-${section.id}`}
+            className="mt-4 flex flex-col items-center gap-2 rounded-xl border border-dashed border-border bg-muted/20 py-8 px-4 text-center"
+          >
+            <div className="flex items-center justify-center w-12 h-12 rounded-full bg-primary/10 text-primary">
+              <ImageIcon size={22} />
+            </div>
+            <p className="text-sm font-medium text-foreground">No photos yet</p>
+            <p className="text-xs text-muted-foreground max-w-xs">
+              Use the uploader above to add photos — they'll appear on the website straight away.
+            </p>
+          </motion.div>
         )}
       </CardContent>
     </Card>
