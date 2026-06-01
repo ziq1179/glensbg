@@ -34,9 +34,25 @@ app.use(
   }),
 );
 
+// In production, lock CORS to the explicit frontend origin(s).
+// Set FRONTEND_ORIGIN on Render (comma-separated if multiple domains).
+// In development, reflect all origins so the Vite dev server can reach the API.
+const allowedOrigins = process.env.FRONTEND_ORIGIN
+  ? process.env.FRONTEND_ORIGIN.split(",").map((o) => o.trim())
+  : null;
+
 app.use(
   cors({
-    origin: true,
+    origin: allowedOrigins
+      ? (origin, callback) => {
+          // Permit server-to-server / curl (no Origin header) and listed origins.
+          if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+          } else {
+            callback(new Error(`CORS: origin ${origin} not allowed`));
+          }
+        }
+      : true, // dev: reflect all origins for convenience
     credentials: true,
   }),
 );

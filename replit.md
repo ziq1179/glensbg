@@ -46,6 +46,7 @@ The live API service (`glensbg`, `srv-d8e0us77f7vs73cmqnrg`) has the following e
 |---|---|
 | `DATABASE_URL` | The bare `postgresql://...` Neon connection string (extracted from `NEON_DATABASE_URL` by stripping the `psql '...'` wrapper) |
 | `SESSION_SECRET` | Strong random value (base64, 48 bytes) — stored in Replit secrets as `SESSION_SECRET` |
+| `FRONTEND_ORIGIN` | The public Render service URL (e.g. `https://glensbg.onrender.com`). Locks CORS to this origin in production. Omit or leave blank in dev (all origins allowed). |
 
 These are set via the Render dashboard / API and are **not** committed to the repo. `NODE_ENV=production` is set by the Render runtime. The `session` table is auto-created by `connect-pg-simple` (`createTableIfMissing: true`) on first boot. The admin user and default `site_settings` rows are seeded in Neon from a prior task.
 
