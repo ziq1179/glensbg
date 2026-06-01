@@ -1,3 +1,11 @@
 <svg width="180" height="180" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect width="180" height="180" rx="36" fill="#FF3C00"/>
+  <rect width="180" height="180" rx="36" fill="#16a34a"/>
+  <!-- House roof -->
+  <polygon points="90,28 152,88 28,88" fill="white" opacity="0.95"/>
+  <!-- House body -->
+  <rect x="44" y="86" width="92" height="66" rx="4" fill="white" opacity="0.95"/>
+  <!-- Door -->
+  <rect x="72" y="108" width="36" height="44" rx="4" fill="#16a34a"/>
+  <!-- Heart in door -->
+  <path d="M90 130 C90 130 78 121 78 114 C78 110 81 107 84.5 107 C87 107 89 109 90 111 C91 109 93 107 95.5 107 C99 107 102 110 102 114 C102 121 90 130 90 130Z" fill="white"/>
 </svg>
